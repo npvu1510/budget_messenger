@@ -1,0 +1,19 @@
+@import './sass/base/reset';
+
+// pages
+@import './sass/pages/register';
+@import './sass/pages/home';
+
+// components
+
+@import './sass/components/activeFriendList';
+@import './sass/components/chatInputBar';
+@import './sass/components/chatWindow';
+@import './sass/components/friendInfo';
+@import './sass/components/friendList';
+@import './sass/components/rightSide';
+
+// others
+
+@import './sass/utils/utils';
+@import './sass/layout/grid';

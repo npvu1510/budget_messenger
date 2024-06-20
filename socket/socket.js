@@ -58,8 +58,8 @@ io.on('connection', (socket) => {
     if (!userInfo) return;
 
     addUsers(userInfo, socket);
-    console.log('DANH SACH SAU HIEN TAI');
-    console.log(users);
+    // console.log('DANH SACH SAU HIEN TAI');
+    // console.log(users);
 
     io.emit(ACTIVE_USERS_FROM_SERVER, users);
   });
@@ -86,7 +86,7 @@ io.on('connection', (socket) => {
 
     // gửi đến tất cả bản thân để cập nhật giao diện
     if (senders) {
-      console.log(senders);
+      // console.log(senders);
       senders.forEach((id) => {
         io.to(id).emit(MESSAGE_FROM_SERVER_FOR_MYSELF, payload);
       });
@@ -110,12 +110,14 @@ io.on('connection', (socket) => {
   });
 
   socket.on(LOGOUT_TO_SERVER, (payload) => {
-    const { userId } = payload;
+    // const { userId } = payload;
 
-    if (!users[userId]) return;
+    removeUsers(socket.id);
 
-    delete users[userId];
-    console.log('xóa vì logout');
+    // if (!users[userId]) return;
+
+    // delete users[userId];
+    // console.log('xóa vì logout');
     io.emit(ACTIVE_USERS_FROM_SERVER, users);
 
     // const { senderId } = payload;
@@ -135,10 +137,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log(`${socket.id} disconnected`);
+    // console.log(`${socket.id} disconnected`);
     removeUsers(socket.id);
 
-    console.log(users);
+    // console.log(users);
     io.emit(ACTIVE_USERS_FROM_SERVER, users);
   });
 });

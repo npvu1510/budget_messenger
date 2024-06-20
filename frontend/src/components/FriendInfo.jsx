@@ -24,7 +24,7 @@ const FriendInfo = () => {
       .filter((msg) => msg.content.image)
       .map((msg) => msg.content.image);
 
-    console.log(imagesForDisplay);
+    // console.log(imagesForDisplay);
     setImages(imagesForDisplay);
   }, [messagesQuery]);
 

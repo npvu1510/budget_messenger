@@ -1,4 +1,6 @@
 .message-show {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   padding: 10px;
   overflow-y: auto;
@@ -22,7 +24,9 @@
     }
   }
   .my-message {
-    float: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align to the right */
     .my-text {
       display: flex;
       align-items: flex-end;
@@ -63,7 +67,9 @@
     }
   }
   .fd-message {
-    float: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align to the left */
     .fd-text {
       display: flex;
       align-items: flex-end;

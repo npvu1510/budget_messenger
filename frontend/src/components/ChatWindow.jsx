@@ -19,6 +19,7 @@ import {
   currentFriendSelector,
   userInfoSelector,
   typingSelector,
+  newMessagesFromSelector,
 } from '../selectors';
 import { useSocket } from '../contexts/socketContext';
 import {
@@ -27,7 +28,6 @@ import {
   MESSAGE_FROM_SERVER_FOR_MYSELF,
   MESSAGE_STATUS_TO_SERVER,
   SEEN_MESSAGE_OF_FROM_SERVER,
-  SEEN_MESSAGE_OF_TO_SERVER,
 } from '../constants';
 
 import apiSlice from '../slices/apiSlice';
@@ -43,6 +43,7 @@ const ChatWindow = () => {
   // Authentication
   const userInfo = useSelector(userInfoSelector);
   const currentFriend = useSelector(currentFriendSelector);
+  const newMessageFrom = useSelector(newMessagesFromSelector);
 
   // socket
   const socket = useSocket();
@@ -58,8 +59,8 @@ const ChatWindow = () => {
 
   useEffect(() => {
     const handleMessageForMySelf = (payload) => {
-      console.log('MYSELF:');
-      console.log(payload);
+      // console.log('MYSELF:');
+      // console.log(payload);
 
       // GỬI TIN NHẮN
       const { _id, receiverId, status, sendingId } = payload;
@@ -87,9 +88,10 @@ const ChatWindow = () => {
           'getMessages',
           currentFriend._id,
           (draft) => {
-            console.log('CẬP NHẬT MY CHAT WINDOWS');
-            // console.log(payload);
+            if (receiverId !== currentFriend._id) return;
             if (sendingId) {
+              console.log('CẬP NHẬT MY CHAT WINDOWS');
+              console.log(payload);
               if (status === 'sending') draft.data.messages.push(payload);
               else {
                 draft.data.messages.find((msg) => {
@@ -118,12 +120,12 @@ const ChatWindow = () => {
     // NHẬN TIN NHẮN
     const handleMessage = (payload) => {
       newMessagePlayer();
-      console.log('NEW MESSAGE:');
+      // console.log('NEW MESSAGE:');
       // console.log(payload);
 
-      const { _id, senderId, receivecrId, content, status } = payload;
+      const { _id, senderId, receiverId, content, status } = payload;
 
-      // Cập nhật friendlist
+      // Cập nhật tin nhan moi
       dispatch(messageSlice.actions.addMessage(senderId));
 
       dispatch(
@@ -136,14 +138,8 @@ const ChatWindow = () => {
             );
             if (friend) {
               friend.lastMsg = payload;
-              if (currentFriend._id === senderId) {
-                updateStatus({ messageId: _id, status: 'seen' });
-
-                socket.emit(MESSAGE_STATUS_TO_SERVER, {
-                  ...payload,
-                  status: 'seen',
-                });
-              } else {
+              // DELIVERED
+              if (currentFriend._id !== senderId) {
                 updateStatus({ messageId: _id, status: 'delivered' });
 
                 socket.emit(MESSAGE_STATUS_TO_SERVER, {
@@ -181,23 +177,41 @@ const ChatWindow = () => {
   // seen tin nhắn khi bấm vào
   useEffect(() => {
     if (messages && messages.length > 0) {
-      if (
-        messages.at(-1).status !== 'seen' &&
-        messages.at(-1).senderId !== userInfo._id
-      ) {
-        dispatch(messageSlice.actions.removeMessage(currentFriend._id));
+      let status = 'seen';
+      // console.log('chạy useEffect để seen tin nhắn');
+      // console.log(`seen messsage from: ${messages.at(-1).senderId}`);
+      // console.log(currentFriend._id);
 
-        updateStatus({ messageId: messages.at(-1)._id, status: 'seen' });
+      // console.log(newMessageFrom, currentFriend._id);
+      if (messages.at(-1).senderId === currentFriend._id) {
+        // console.log('Đang cập nhật seen');
+        // console.log('chạy useEffect để seen tin nhắn');
+        // console.log(currentFriend._id);
+        // console.log(messages.at(-1));
+        updateStatus({ messageId: messages.at(-1)._id, status: status });
 
         socket.emit(MESSAGE_STATUS_TO_SERVER, {
           ...messages.at(-1),
-          status: 'seen',
+          status: status,
         });
-
-        socket.emit(SEEN_MESSAGE_OF_TO_SERVER, currentFriend);
+        dispatch(messageSlice.actions.removeMessage(currentFriend._id));
       }
     }
-  }, [messages, currentFriend, userInfo, socket, updateStatus, dispatch]);
+  }, [
+    messages,
+    currentFriend,
+    newMessageFrom,
+    userInfo,
+    socket,
+    updateStatus,
+    dispatch,
+  ]);
+
+  // Chuyển currentUser => tin nhắn không còn mới => xóa khỏi newMessages
+  useEffect(() => {
+    // console.log('chạy useEffect để xóa tin nhắn mới');
+    dispatch(messageSlice.actions.removeMessage(currentFriend._id));
+  }, [currentFriend, dispatch]);
 
   useEffect(() => {
     const handleSeenMessageOf = (senderId) => {
@@ -216,7 +230,6 @@ const ChatWindow = () => {
   // Lắng nghe typing
   useEffect(() => {
     if (!socket) return;
-    console.log('aaaaa');
     const typingHandler = ({ senderId, receiverId, isTyping }) => {
       if (senderId === currentFriend._id) {
         dispatch(

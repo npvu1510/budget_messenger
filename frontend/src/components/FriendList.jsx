@@ -13,12 +13,12 @@ import friendSlice from '../slices/friendSlice';
 import { useGetMyFriendsWithLastMsgQuery } from '../slices/userApiSlice';
 
 // selectors
-import { currentFriendSelector, userInfoSelector } from '../selectors';
+import {
+  currentFriendSelector,
+  newMessagesFromSelector,
+  userInfoSelector,
+} from '../selectors';
 import messageSlice from '../slices/messageSlice';
-import { useSocket } from '../contexts/socketContext';
-import { DEV_FROM_SERVER, SEEN_FROM_SERVER } from '../constants';
-
-import apiSlice from '../slices/apiSlice';
 
 const FriendList = ({ search }) => {
   const dispatch = useDispatch();
@@ -26,11 +26,12 @@ const FriendList = ({ search }) => {
   const userInfo = useSelector(userInfoSelector);
 
   const currentFriend = useSelector(currentFriendSelector);
+  const newMessages = useSelector(newMessagesFromSelector);
 
   // FRIENDS WITH LAST MESSAGE QUERY
   const friendsQuery = useGetMyFriendsWithLastMsgQuery(undefined, {
-    // pollingInterval: 10000,
-    // skipPollingIfUnfocused: true,
+    pollingInterval: 3000,
+    skipPollingIfUnfocused: true,
   });
   const [friends, setFriends] = useState(null);
 
@@ -56,7 +57,7 @@ const FriendList = ({ search }) => {
   }, [currentFriend, friends, dispatch]);
 
   useEffect(() => {
-    if (friends) {
+    if (friends && !newMessages) {
       const newMessagesFrom = friends
         .filter(
           (fr) =>
@@ -68,7 +69,7 @@ const FriendList = ({ search }) => {
 
       dispatch(messageSlice.actions.setNewMessage(newMessagesFrom));
     }
-  }, [friends, userInfo, dispatch]);
+  }, [friends, newMessages, userInfo._id, dispatch]);
 
   const handleChangeFriend = (friend) => {
     dispatch(friendSlice.actions.setCurrentFriend(friend));
@@ -77,7 +78,6 @@ const FriendList = ({ search }) => {
 
   return (
     <div className="friends">
-      {(friendsQuery.isFetching || !currentFriend) && <span>Loading...</span>}
       {friends &&
         currentFriend &&
         friends.map((fd) => (

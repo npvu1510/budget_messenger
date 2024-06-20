@@ -1,40 +1,23 @@
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import toast from 'react-hot-toast';
 
-import { FaEllipsisH, FaEdit, FaSistrix } from 'react-icons/fa';
-
-import ActiveFriendList from '../components/ActiveFriendList';
+import { FaEdit, FaSistrix } from 'react-icons/fa';
 // import FriendItem from '../components/FriendItem';
 import FriendList from '../components/FriendList';
 import RightSide from '../components/RightSide';
 
 import friendSlice from '../slices/friendSlice';
 
-import {
-  currentFriendSelector,
-  getFriends,
-  setShowMessages,
-  socketSelector,
-  userInfoSelector,
-} from '../selectors';
-
-import useSound from 'use-sound';
-import notSfx from '../audio/notification.mp3';
-import sendSfx from '../audio/sending.mp3';
+import { userInfoSelector } from '../selectors';
 
 import { useSocket } from '../contexts/socketContext';
 
 import {
   ACTIVE_USERS_FROM_SERVER,
-  DEV_FROM_SERVER,
-  TYPING_FROM_SERVER,
   LOGOUT_TO_SERVER,
   LOGIN_SIGNAL_TO_SERVER,
 } from '../constants';
 
-import { FaSignOutAlt } from 'react-icons/fa';
 import { IoLogOutOutline } from 'react-icons/io5';
 
 import { useLogoutMutation } from '../slices/authApiSlice';
@@ -51,7 +34,6 @@ const Messenger = () => {
 
   const [logout, { isLoading }] = useLogoutMutation();
 
-  const [hide, setHide] = useState(true);
   const [search, setSearch] = useState('');
 
   const handleSearch = (e) => {
@@ -62,7 +44,7 @@ const Messenger = () => {
   useEffect(() => {
     if (!socket) return;
 
-    // Nhận danh sách users active
+    // Nhận danh sách users dang hoat dong
     socket.on(ACTIVE_USERS_FROM_SERVER, (users) => {
       const values = Object.values(users);
       const filteredUsers = values.filter((user) => user._id !== userInfo._id);
@@ -111,23 +93,6 @@ const Messenger = () => {
                 <div className="icon">
                   <FaEdit />
                 </div>
-
-                {/* <div className={hide ? 'theme_logout' : 'theme_logout show'}>
-                  <h3>Dark Mode </h3>
-                  <div className="on">
-                    <label htmlFor="dark">ON</label>
-                    <input type="radio" value="dark" name="theme" id="dark" />
-                  </div>
-
-                  <div className="of">
-                    <label htmlFor="white">OFF</label>
-                    <input type="radio" value="white" name="theme" id="white" />
-                  </div>
-
-                  <div onClick={handleLogout} className="logout">
-                    <FaSignOutAlt /> Logout
-                  </div>
-                </div> */}
               </div>
             </div>
 
@@ -145,12 +110,6 @@ const Messenger = () => {
                 />
               </div>
             </div>
-
-            {/* <div className="active-friends">
-              <ActiveFriendList />
-            </div> */}
-
-            {/* {friendsQuery.isFetching && <span>Loading...</span>} */}
 
             <FriendList search={search} />
           </div>

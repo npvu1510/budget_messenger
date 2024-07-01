@@ -1,6 +1,7 @@
 # Budget Messenger
 
-- A chat application built with the MERN stack, simulating the features and behavior of modern chat apps like Messenger using Socket.IO.
+- A MERN stack project that implements a chat application with features similar to Messenger using Socket.IO, but much simpler.
+- [Demo and detailed explaination](https://youtu.be/3YGU2mHhtSg)
 
 ## Features
 
@@ -96,3 +97,9 @@ budget-messenger/
 ├── package-lock.json
 ├── package.json
 └── README.md
+
+## Contribution
+Feel free to fork this project and submit pull requests. Any contributions are greatly appreciated.
+
+## License
+This project is licensed under the MIT License.

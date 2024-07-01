@@ -69,29 +69,30 @@
    npm run server
 
 ## Project Structure
+```sh
 budget-messenger/
-  ├── backend/
-  │ ├── config/
-  │ ├── controllers/
-  │ ├── middlewares/
-  │ ├── models/
-  │ ├── routes/
-  │ ├── utils/
-  │ ├── app.js
-  │ └── server.js
-  ├── frontend/
-  │ ├── public/
-  │ ├── src/
-  │ ├── package-lock.json
-  │ ├── package.json
-  │ └── README.md
-  ├── node_modules/
-  ├── screenshots/
-  ├── socket/
-  ├── uploads/
-  ├── .env
-  ├── .gitignore
-  ├── index.html
-  ├── package-lock.json
-  ├── package.json
-  └── README.md
+├── backend/
+│ ├── config/
+│ ├── controllers/
+│ ├── middlewares/
+│ ├── models/
+│ ├── routes/
+│ ├── utils/
+│ ├── app.js
+│ └── server.js
+├── frontend/
+│ ├── public/
+│ ├── src/
+│ ├── package-lock.json
+│ ├── package.json
+│ └── README.md
+├── node_modules/
+├── screenshots/
+├── socket/
+├── uploads/
+├── .env
+├── .gitignore
+├── index.html
+├── package-lock.json
+├── package.json
+└── README.md

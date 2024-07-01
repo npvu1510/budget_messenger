@@ -22,17 +22,16 @@
 - **Real-time communication:** Socket.IO
 
 ## Screenshots
+
+### Register Page
+![Register Page](./screenshots/login.png)
+
 ### Login Page
 ![Login Page](./screenshots/login.png)
 
 ### Chat Page
-![Chat Page](./screenshots/chat.png)
+![Chat Page](./screenshots/main.png)
 
-### Online Friends List
-![Online Friends List](./screenshots/online_friends.png)
-
-### Message Status
-![Message Status](./screenshots/message_status.png)
 
 ## Project Setup
 

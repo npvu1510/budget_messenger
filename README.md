@@ -47,14 +47,14 @@
 3. Set up environment variables:
    Create a `.env` file in the root directory and add the necessary environment variables. An example `.env` file:
    ```env
-  PORT = 5000
-  
-  MONGODB_URI_STRING = ...
-  
-  JWT_SECRET_KEY = ...
-  
-  JWT_EXPIRES_IN = 24h
-  COOKIE_EXPIRES_IN_DAY = 100
+    PORT = 5000
+    
+    MONGODB_URI_STRING = ...
+    
+    JWT_SECRET_KEY = ...
+    
+    JWT_EXPIRES_IN = 24h
+    COOKIE_EXPIRES_IN_DAY = 100
 
 4. Start server:
    ```sh

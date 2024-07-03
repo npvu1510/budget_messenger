@@ -97,6 +97,7 @@ budget-messenger/
 ├── package-lock.json
 ├── package.json
 └── README.md
+```
 
 ## Contribution
 Feel free to fork this project and submit pull requests. Any contributions are greatly appreciated.
